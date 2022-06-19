@@ -3,22 +3,19 @@ import "./MainPage.css";
 import axios from "axios";
 
 const MainPage = () => {
-	let [products, setProducts] = React.useState([]);  
-	const url = "https://177d706a-05d8-4834-b1b9-474662fb5829.mock.pstmn.io/products";
-  
-  React.useEffect(()=>{
-    axios
-		.get(url)
-		.then((result) => {
-      products=result.data.products;
-      setProducts(products)			
-		})
-		.catch((error) => {
-			console.log(`통신실패:${error}`);
-		});
-  },[])
+	let [products, setProducts] = React.useState([]);
 
-
+	React.useEffect(() => {
+		axios
+			.get("https://684899af-061b-46df-88db-ac810be657b6.mock.pstmn.io/products")
+			.then((result) => {
+				products = result.data.products;
+				setProducts(products);
+			})
+			.catch((error) => {
+				console.log(`통신실패:${error}`);
+			});
+	}, []);
 
 	return (
 		<div>
@@ -33,19 +30,23 @@ const MainPage = () => {
 				</div>
 				<h1>Products</h1>
 				<div id="product-list">
-					<div className="product-card">
-						<div>
-							<img className="product-img" src="images/products/food1.jpg" alt="" />
-						</div>
-						<div className="product-contents">
-							<span className="product-name">습식사료</span>
-							<span className="product-price">50000원</span>
-							<div className="product-seller">
-								<img src="images/icons/avatar.png" alt="" className="product-avatar" />
-								<span>내츄럴코어</span>
+					{products.map((product, idx) => {
+						return (
+							<div className="product-card" key={idx}>
+								<div>
+									<img className="product-img" src={product.imgURL} alt={product.name} />
+								</div>
+								<div className="product-contents">
+									<span className="product-name">{product.name}</span>
+									<span className="product-price">{product.price}</span>
+									<div className="product-seller">
+										<img src="images/icons/avatar.png" alt="" className="product-avatar" />
+										<span>{product.seller}</span>
+									</div>
+								</div>
 							</div>
-						</div>
-					</div>
+						);
+					})}
 				</div>
 			</div>
 			<div id="footer">
