@@ -7,7 +7,7 @@ const MainPage = () => {
 
 	React.useEffect(() => {
 		axios
-			.get("https://684899af-061b-46df-88db-ac810be657b6.mock.pstmn.io/products")
+			.get("https://3a07e846-385d-469c-80a6-0a4c4cdfddcd.mock.pstmn.io/products")
 			.then((result) => {
 				products = result.data.products;
 				setProducts(products);
@@ -31,10 +31,11 @@ const MainPage = () => {
 				<h1>Products</h1>
 				<div id="product-list">
 					{products.map((product, idx) => {
+						console.log(product)
 						return (
 							<div className="product-card" key={idx}>
 								<div>
-									<img className="product-img" src={product.imgURL} alt={product.name} />
+									<img className="product-img" src={product.imageUrl} alt={product.name} />
 								</div>
 								<div className="product-contents">
 									<span className="product-name">{product.name}</span>
