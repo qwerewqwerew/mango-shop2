@@ -28,7 +28,7 @@ const ProductPage = () => {
 	}
 
 	return (
-		<div>
+		<div id="body">
 			<button
 				onClick={() => {
 					navigate(-1);

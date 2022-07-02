@@ -1,16 +1,25 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Link, useNavigate } from "react-router-dom";
 import MainPage from "./components/MainPage";
 import UploadPage from "./components/UploadPage";
 import ProductPage from "./components/ProductPage";
 import "./App.css";
+import "antd/dist/antd.css";
+import { DownloadOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 
 function App() {
+	let navigate=useNavigate();
 	return (
 		<React.Fragment>
 			<div id="header">
 				<div id="header-area">
-					<img src="images/icons/logo.png" alt="" />
+					<Link to="/">
+						<img src="images/icons/logo.png" alt="" />
+					</Link>
+					<Button size="large" shape="round" icon={<DownloadOutlined />}onClick={()=>navigate('/UploadPage')}> 
+						업로드
+					</Button>
 				</div>
 			</div>
 
@@ -27,7 +36,6 @@ function App() {
 				<a href="#">사업자등록번호:456-56-78951</a>
 				<a href="#"></a>
 			</div>
-
 		</React.Fragment>
 	);
 }
