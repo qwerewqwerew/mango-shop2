@@ -12,11 +12,10 @@ const ProductPage = () => {
 	useEffect(() => {
 		axios
 			.get(
-				`
-		https://3a07e846-385d-469c-80a6-0a4c4cdfddcd.mock.pstmn.io/products/${id}`,
+				`http://localhost:8080/products/${id}`,
 			)
 			.then((result) => {
-				setProduct(result.data);
+				setProduct(result.data.product);
 			})
 			.catch((error) => {
 				console.error(error);

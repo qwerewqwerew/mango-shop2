@@ -2,15 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./MainPage.css";
 import axios from "axios";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 const MainPage = () => {
 	let [products, setProducts] = React.useState([]);
 
 	React.useEffect(() => {
 		axios
-			.get("https://3a07e846-385d-469c-80a6-0a4c4cdfddcd.mock.pstmn.io/products")
+			.get("http://localhost:8080/products")
 			.then((result) => {
-				products = result.data.products;
+				products = result.data.product;
 				setProducts(products);
 			})
 			.catch((error) => {
@@ -26,7 +29,7 @@ const MainPage = () => {
 				</div>
 				<h1>Products</h1>
 				<div id="product-list">
-					{products.map((product, idx) => {						
+					{products.map((product, idx) => {
 						return (
 							<div className="product-card" key={idx}>
 								<Link className="product-link" to={`/ProductPage/${product.id}`}>
@@ -37,9 +40,12 @@ const MainPage = () => {
 								<div className="product-contents">
 									<span className="product-name">{product.name}</span>
 									<span className="product-price">{product.price}원</span>
-									<div className="product-seller">
-										<img src="images/icons/avatar.png" alt={product.seller} className="product-avatar" />
-										<span>{product.seller}</span>
+									<div className="product-footer">
+										<div className="product-seller">
+											<img src="images/icons/avatar.png" alt={product.seller} className="product-avatar" />
+											<span>{product.seller}</span>
+										</div>
+										<span className="product-date">{dayjs(product.createdAt).fromNow()}</span>
 									</div>
 								</div>
 							</div>
