@@ -1,16 +1,39 @@
 import { useState } from "react";
 import "./UploadPage.css";
-
-import { Form, Divider, Input, InputNumber, Button, Upload } from "antd";
+import axios from "axios";
+import { API_URL } from "../config/constants";
+import { useNavigate } from "react-router-dom";
+import { Form, Divider, Input, InputNumber, Button, Upload , message} from "antd";
 const { TextArea } = Input;
 
 const UploadPage = () => {
+	const navigate = useNavigate();
 	const [imageUrl, setImageUrl] = useState(null);
 	const onSubmit = (values) => {
-		console.log("이것은 벨류", values);
+		axios
+			.post(`${API_URL}/products`, {
+				name: values.name,
+				description: values.description,
+				seller: values.seller,
+				price: parseInt(values.price),
+				imageUrl: imageUrl,
+			})
+			.then((result) => {
+				navigate("/", { replace: true });
+			})
+			.catch((error) => {
+				message.error(`상품등록시 에러가 발생했습니다 ${error.message}`)
+			});
 	};
-	const onChageImage = () => {
-		setImageUrl(imageUrl);
+	const onChageImage = (info) => {
+		if (info.file.status === "uploading") {
+			return;
+		}
+		if (info.file.status === "done") {
+			const response = info.file.response;
+			const imageUrl = response.imageUrl;
+			setImageUrl(imageUrl);
+		}
 	};
 
 	return (
@@ -18,11 +41,15 @@ const UploadPage = () => {
 			<div id="load-container">
 				<Form name="uploadForm" onFinish={onSubmit}>
 					<Form.Item name="upload" label={<div className="upload-label">상품 사진</div>}>
-						<Upload name="image" listType="picture" showUploadList={false} onChage={onChageImage}>
-							<div id="upload-img-placeholder">
-								<img src="/images/icons/camera.png" />
-								<span>이미지를 업로드해주세요.</span>
-							</div>
+						<Upload name="image" action={`${API_URL}/image`} listType="picture" showUploadList={false} onChange={onChageImage}>
+							{imageUrl ? (
+								<img id="upload-img" src={`${API_URL}/${imageUrl}`} />
+							) : (
+								<div id="upload-img-placeholder">
+									<img src="/images/icons/camera.png" />
+									<span>이미지업로드</span>
+								</div>
+							)}
 						</Upload>
 					</Form.Item>
 					<Divider />

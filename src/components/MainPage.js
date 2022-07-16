@@ -1,3 +1,4 @@
+import {API_URL} from "../config/constants"
 import React from "react";
 import { Link } from "react-router-dom";
 import "./MainPage.css";
@@ -11,7 +12,7 @@ const MainPage = () => {
 
 	React.useEffect(() => {
 		axios
-			.get("http://localhost:8080/products")
+			.get(`${API_URL}/products`)
 			.then((result) => {
 				products = result.data.product;
 				setProducts(products);
@@ -34,7 +35,7 @@ const MainPage = () => {
 							<div className="product-card" key={idx}>
 								<Link className="product-link" to={`/ProductPage/${product.id}`}>
 									<div>
-										<img className="product-img" src={product.imageUrl} alt={product.name} />
+										<img className="product-img" src={`${API_URL}/${product.imageUrl}`} alt={product.name} />
 									</div>
 								</Link>
 								<div className="product-contents">
