@@ -1,16 +1,18 @@
-import {API_URL} from "../config/constants"
+import { API_URL } from "../config/constants";
 import React from "react";
 import { Link } from "react-router-dom";
 import "./MainPage.css";
 import axios from "axios";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { Carousel } from "antd";
 dayjs.extend(relativeTime);
 
 const MainPage = () => {
 	let [products, setProducts] = React.useState([]);
-
+	const [banners, setBanners] = React.useState([]);
 	React.useEffect(() => {
+		/* products 통신 */
 		axios
 			.get(`${API_URL}/products`)
 			.then((result) => {
@@ -20,14 +22,33 @@ const MainPage = () => {
 			.catch((error) => {
 				console.log(`통신실패:${error}`);
 			});
+
+		/* banners 통신 */
+		axios
+			.get(`${API_URL}/banners`)
+			.then((result) => {
+				const banners = result.data.banners;
+				setBanners(banners);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
 	}, []);
 
 	return (
 		<div>
 			<div id="body">
-				<div id="banner">
-					<img src="images/banners/banner1.png" alt="" />
-				</div>
+				<Carousel autoplay autoplaySpeed={3000}>
+					{banners.map((banner, index) => {
+						return (
+							<Link to={banner.href} key={index}>
+								<div id="banner">
+									<img src={`${API_URL}/${banner.imageUrl}`} />
+								</div>
+							</Link>
+						);
+					})}
+				</Carousel>
 				<h1>Products</h1>
 				<div id="product-list">
 					{products.map((product, idx) => {
